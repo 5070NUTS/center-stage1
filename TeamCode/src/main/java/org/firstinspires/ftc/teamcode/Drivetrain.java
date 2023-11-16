@@ -118,16 +118,25 @@ public class Drivetrain {
 
 
         //viper slides
-        double up = (gamepad2.left_stick_y);
-        double viperLeft = up;
-        double viperRight = up;
-        viperSlideLeft.setPower(viperLeft);
-        viperSlideRight.setPower(viperRight);
+        slideVipers(gamepad2.left_stick_y);
+
+        if(viperSlideLeft.getCurrentPosition() == 400){
+            right.setPosition(0.5);
+            wait(90);
+            right.setPosition(0.45);
+        }
 
         //intake
-        double pull = (gamepad2.right_trigger);
-        double eject = (-gamepad2.left_trigger);
+
+        double pull = (gamepad2.left_trigger);
+        double eject = (-gamepad2.right_trigger);
         intake.setPower(pull + eject);
+
+        while(gamepad2.right_trigger > 0.8){
+            right.setPosition(0.45);
+        }
+
+
        // if (gamepad2.y) {
 
         //launcher
@@ -137,11 +146,11 @@ public class Drivetrain {
             launcher.setPosition(1);
         }
         //door
-        if(gamepad2.left_bumper){
+        if(gamepad2.right_bumper){
             middle.setPosition(0.45);
         }
-        if(gamepad2.right_bumper){
-            middle.setPosition(0.35);
+        if(gamepad2.left_bumper){
+            middle.setPosition(0.1);
         }
 
         if(gamepad2.x){
@@ -154,11 +163,13 @@ public class Drivetrain {
             right.setPosition(0.15);
             wait(375);
             middle.setPosition(0.35);
+            wait(275);
+            right.setPosition(0.5);
         }
 
         if(gamepad2.b){
             //left.setPosition((0.5 - 0.3)/5);
-            right.setPosition(0.42);
+            right.setPosition(0.5);
 
         }
 
@@ -166,10 +177,32 @@ public class Drivetrain {
             //left.setPosition((0.5+0.3)/5);
             right.setPosition(1);
         }
-
-
-
-
+//        if(gamepad2.dpad_up){
+//            slideVipers(-2400,0.5);
+//            wait(800);
+//            right.setPosition(0.10);
+//            wait(375);
+//            middle.setPosition(0.35);
+//            wait(375);
+//            right.setPosition(0.9);
+//
+//        }
+//        if(gamepad2.dpad_right){
+//
+//            slideVipers(-3700,0.2);
+//            wait(100);
+//            right.setPosition(0.15);
+//            wait(375);
+//            middle.setPosition(0.35);
+//
+//        }
+//        int targetPosition = 0;
+//
+//        while (Math.abs(gamepad1.left_stick_y) > 0) {
+//            targetPosition += gamepad1.left_stick_y * 20;
+//            wait(50);
+//        }
+//        gaySlides(targetPosition, 0.2);
 
     }
     public void testTele(Gamepad gamepad1, Gamepad gamepad2){
@@ -315,7 +348,17 @@ public class Drivetrain {
     }
 
    public void slideVipers(int position, double power) {
-       viperSlideLeft.setTargetPosition(position);
+        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        viperSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        viperSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        viperSlideLeft.setTargetPosition(position);
         viperSlideRight.setTargetPosition(position);
 
         viperSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -332,6 +375,81 @@ public class Drivetrain {
             opMode.telemetry.addData("viperSlideRight target", viperSlideRight.getTargetPosition());
             opMode.telemetry.update();
         }
+
+        viperSlideLeft.setPower(0);
+        viperSlideRight.setPower(0);
+
+    }
+
+    public void gaySlides(int targetPositions, double power) {
+        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        viperSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        viperSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        viperSlideLeft.setTargetPosition(targetPositions);
+        viperSlideRight.setTargetPosition(targetPositions);
+
+        viperSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        viperSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        viperSlideLeft.setPower(power);
+        viperSlideRight.setPower(power);
+
+        while (viperSlideLeft.isBusy()) {
+            opMode.telemetry.addData("viperSlideLeft current", viperSlideLeft.getCurrentPosition());
+            opMode.telemetry.addData("viperSlideLeft target", viperSlideLeft.getTargetPosition());
+
+            opMode.telemetry.addData("viperSlideRight current", viperSlideRight.getCurrentPosition());
+            opMode.telemetry.addData("viperSlideRight target", viperSlideRight.getTargetPosition());
+            opMode.telemetry.update();
+        }
+
+        viperSlideLeft.setPower(0);
+        viperSlideRight.setPower(0);
+    }
+
+    public void slideVipers(double power) {
+        viperSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        viperSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        viperSlideLeft.setPower(power);
+        viperSlideRight.setPower(power);
+    }
+
+    public void autoScore(int position, double power, double rightPos, double midPos) {
+        viperSlideLeft.setTargetPosition(position);
+        viperSlideRight.setTargetPosition(position);
+
+        viperSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        viperSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        viperSlideLeft.setPower(power);
+        viperSlideRight.setPower(power);
+
+        wait(2000);
+        right.setPosition(rightPos);
+        wait(950);
+        middle.setPosition(midPos);
+        wait(800);
+        right.setPosition(0.5);
+
+
+        while (viperSlideLeft.isBusy()) {
+            opMode.telemetry.addData("viperSlideLeft current", viperSlideLeft.getCurrentPosition());
+            opMode.telemetry.addData("viperSlideLeft target", viperSlideLeft.getTargetPosition());
+
+            opMode.telemetry.addData("viperSlideRight current", viperSlideRight.getCurrentPosition());
+            opMode.telemetry.addData("viperSlideRight target", viperSlideRight.getTargetPosition());
+            opMode.telemetry.update();
+            break;
+        }
+
+    }
+
+    public void autoSet(double pos){
+        right.setPosition(pos);
 
     }
     public void wait(int ms) {

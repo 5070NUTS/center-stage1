@@ -36,10 +36,6 @@ public class autoTesting extends LinearOpMode {
 
 
 
-            frontLeft.setPower(0.2);
-            frontRight.setPower(0.2);
-            backLeft.setPower(0.2);
-            backRight.setPower(0.2);
 
             //hazel.drive(1170,0.5);
             //break;
