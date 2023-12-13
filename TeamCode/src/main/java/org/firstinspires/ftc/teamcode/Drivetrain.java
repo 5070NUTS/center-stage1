@@ -17,14 +17,15 @@ public class Drivetrain {
     private DcMotor frontRight;
     private DcMotor backLeft;
     private DcMotor backRight;
-    private DcMotor viperSlideLeft;
-    private DcMotor viperSlideRight;
-    private DcMotor intake;
-    private Servo launcher;
-    //private Servo left;
-    private Servo middle;
-    private Servo right;
-    //private Servo door;
+    private DcMotor viperSlide;
+    private DcMotor axle1;
+    private DcMotor axle2;
+    private Servo leftHanging;
+    private Servo rightHanging;
+    private Servo pivot;
+    private Servo rightClaw;
+    private Servo leftClaw;
+
 
     IMU imu;
     YawPitchRollAngles ypr;
@@ -35,35 +36,35 @@ public class Drivetrain {
         frontRight = hardwareMap.get(DcMotor.class,"frontRight");
         backLeft = hardwareMap.get(DcMotor.class,"backLeft");
         backRight = hardwareMap.get(DcMotor.class,"backRight");
-        intake = hardwareMap.get(DcMotor.class,"intake");
-        launcher = hardwareMap.get(Servo.class, "launcher");
-        //left = hardwareMap.get(Servo.class, "left");
-        middle = hardwareMap.get(Servo.class, "middle");
-        right = hardwareMap.get(Servo.class, "right");
-        //door = hardwareMap.get(Servo.class, "door");
-        viperSlideLeft = hardwareMap.get(DcMotor.class,"viperSlideLeft");
-        viperSlideRight = hardwareMap.get(DcMotor.class,"viperSlideRight");
+        axle1 = hardwareMap.get(DcMotor.class,"axle1");
+        axle2 = hardwareMap.get(DcMotor.class,"axle2");
+        leftHanging = hardwareMap.get(Servo.class, "leftHanging");
+        rightHanging = hardwareMap.get(Servo.class, "rightHanging");
+        pivot = hardwareMap.get(Servo.class, "pivot");
+        rightClaw = hardwareMap.get(Servo.class, "rightClaw");
+        leftClaw = hardwareMap.get(Servo.class, "leftClaw");
+        viperSlide = hardwareMap.get(DcMotor.class,"viperSlide");
 
 
 
         this.opMode = opMode;
 
-        frontLeft.setDirection(DcMotor.Direction.FORWARD);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-        viperSlideLeft.setDirection(DcMotor.Direction.REVERSE);
-        viperSlideRight.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotor.Direction.FORWARD);
+        viperSlide.setDirection(DcMotor.Direction.REVERSE);
+        axle1.setDirection(DcMotor.Direction.REVERSE);
+        axle2.setDirection(DcMotor.Direction.REVERSE);
 
         encoders();
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        viperSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        viperSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        viperSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        axle1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        axle2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
 
@@ -71,9 +72,10 @@ public class Drivetrain {
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
-        viperSlideLeft.setPower(0);
-        viperSlideRight.setPower(0);
-        intake.setPower(0);
+
+        viperSlide.setPower(0);
+        axle1.setPower(0);
+        axle2.setPower(0);
 
 
     }
@@ -83,26 +85,28 @@ public class Drivetrain {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        axle1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        axle2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        viperSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        viperSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        viperSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        axle1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        axle2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        viperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void teleop(Gamepad gamepad1, Gamepad gamepad2) {
-        launcher.setPosition(1);
 
-        //gamepad 1
-        //drivings
+        rightHanging.setPosition(0.13);
+
+        //driving motion
         double drive = (-1*(gamepad1.left_stick_y));
         double strafe = (gamepad1.left_stick_x);
         double rotate = (gamepad1.right_stick_x);
@@ -115,31 +119,57 @@ public class Drivetrain {
         backLeft.setPower(BL);
         backRight.setPower(BR);
 
+        //axle motion
+        double moveAxles = gamepad2.right_stick_y;
+        axle2.setPower(moveAxles/2);
+        axle1.setPower(moveAxles/2);
+
 
 
         //viper slides
-        slideVipers(gamepad2.left_stick_y);
+       slideVipers(gamepad2.left_stick_y);
 
-        if(viperSlideLeft.getCurrentPosition() == 400){
-            right.setPosition(0.5);
-            wait(90);
-            right.setPosition(0.45);
+       //claw motion
+        //open
+        if(gamepad2.left_bumper){
+            leftClaw.setPosition(0.2);
+            rightClaw.setPosition(0.25);
+        }
+        //close
+        if(gamepad2.right_bumper){
+            leftClaw.setPosition(0.63);
+            rightClaw.setPosition(0.188);
         }
 
-        //intake
-
-        double pull = (gamepad2.left_trigger);
-        double eject = (-gamepad2.right_trigger);
-        intake.setPower(pull + eject);
-
-        while(gamepad2.right_trigger > 0.8){
-            right.setPosition(0.45);
+        //pivot
+        if(gamepad2.x){
+            pivot.setPosition(0);
         }
+        if(gamepad2.y){
+            pivot.setPosition(0.3);
+        }
+
+        //hanging motion
+       if(gamepad2.dpad_up){
+           leftHanging.setPosition(0.5);
+           rightHanging.setPosition(0.5);
+           wait(1500);
+       }
+
+
+
+
+
+
+
+
+
 
 
        // if (gamepad2.y) {
 
         //launcher
+        /*
         if(gamepad2.y){
             launcher.setPosition(0.6);
             wait(200);
@@ -157,6 +187,9 @@ public class Drivetrain {
            //left.setPosition((0.5 - 0.4)/5);
             right.setPosition(0.9);
         }
+
+         */
+        /*
 //lifting state
         if(gamepad2.a){
             //left.setPosition(0.3);
@@ -177,6 +210,8 @@ public class Drivetrain {
             //left.setPosition((0.5+0.3)/5);
             right.setPosition(1);
         }
+
+         */
 //        if(gamepad2.dpad_up){
 //            slideVipers(-2400,0.5);
 //            wait(800);
@@ -205,6 +240,7 @@ public class Drivetrain {
 //        gaySlides(targetPosition, 0.2);
 
     }
+    /*
     public void testTele(Gamepad gamepad1, Gamepad gamepad2){
 
         opMode.telemetry.addData("door current", middle.getPosition());
@@ -216,6 +252,8 @@ public class Drivetrain {
 
 
     }
+
+     */
     public void drive(int forward, double power){
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -348,76 +386,45 @@ public class Drivetrain {
     }
 
    public void slideVipers(int position, double power) {
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        viperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        viperSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        viperSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        viperSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        viperSlide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        viperSlideLeft.setTargetPosition(position);
-        viperSlideRight.setTargetPosition(position);
+        viperSlide.setTargetPosition(position);
 
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        viperSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        viperSlideLeft.setPower(power);
-        viperSlideRight.setPower(power);
+        viperSlide.setPower(power);
 
-        while (viperSlideLeft.isBusy()) {
-            opMode.telemetry.addData("viperSlideLeft current", viperSlideLeft.getCurrentPosition());
-            opMode.telemetry.addData("viperSlideLeft target", viperSlideLeft.getTargetPosition());
+        while (viperSlide.isBusy()) {
 
-            opMode.telemetry.addData("viperSlideRight current", viperSlideRight.getCurrentPosition());
-            opMode.telemetry.addData("viperSlideRight target", viperSlideRight.getTargetPosition());
+
+            opMode.telemetry.addData("viperSlideRight current", viperSlide.getCurrentPosition());
+            opMode.telemetry.addData("viperSlideRight target", viperSlide.getTargetPosition());
             opMode.telemetry.update();
         }
 
-        viperSlideLeft.setPower(0);
-        viperSlideRight.setPower(0);
+
+        viperSlide.setPower(0);
 
     }
 
-    public void gaySlides(int targetPositions, double power) {
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        viperSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        viperSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        viperSlideLeft.setTargetPosition(targetPositions);
-        viperSlideRight.setTargetPosition(targetPositions);
-
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        viperSlideLeft.setPower(power);
-        viperSlideRight.setPower(power);
-
-        while (viperSlideLeft.isBusy()) {
-            opMode.telemetry.addData("viperSlideLeft current", viperSlideLeft.getCurrentPosition());
-            opMode.telemetry.addData("viperSlideLeft target", viperSlideLeft.getTargetPosition());
-
-            opMode.telemetry.addData("viperSlideRight current", viperSlideRight.getCurrentPosition());
-            opMode.telemetry.addData("viperSlideRight target", viperSlideRight.getTargetPosition());
-            opMode.telemetry.update();
-        }
-
-        viperSlideLeft.setPower(0);
-        viperSlideRight.setPower(0);
-    }
 
     public void slideVipers(double power) {
-        viperSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        viperSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        viperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        viperSlideLeft.setPower(power);
-        viperSlideRight.setPower(power);
+        viperSlide.setPower(power);
     }
 
+    public void axleMove(double power) {
+        viperSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        viperSlide.setPower(power);
+    }
+/*
     public void autoScore(int position, double power, double rightPos, double midPos) {
         viperSlideLeft.setTargetPosition(position);
         viperSlideRight.setTargetPosition(position);
@@ -448,10 +455,9 @@ public class Drivetrain {
 
     }
 
-    public void autoSet(double pos){
-        right.setPosition(pos);
+ */
 
-    }
+
     public void wait(int ms) {
         ElapsedTime timer = new ElapsedTime();
         timer.startTime();
@@ -459,6 +465,8 @@ public class Drivetrain {
             opMode.telemetry.update();
         }
     }
+
+
 
 
 }

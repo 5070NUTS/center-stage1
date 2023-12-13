@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ServoTesting extends LinearOpMode {
     public void runOpMode(){
-        Servo left = hardwareMap.get(Servo.class, "left");
+        Servo leftHanging = hardwareMap.get(Servo.class, "leftHanging");
         //Servo right = hardwareMap.get(Servo.class, "right");
         Drivetrain hazel = new Drivetrain(this, hardwareMap);
         waitForStart();
@@ -28,8 +28,8 @@ public class ServoTesting extends LinearOpMode {
 //            }
             //door.setPosition(0.5);
             if(gamepad1.a){
-                left.setPosition(left.getPosition()+0.05);
-                telemetry.addData("left", left.getPosition());
+                leftHanging.setPosition(leftHanging.getPosition()+0.05);
+                telemetry.addData("leftHanging", leftHanging.getPosition());
                 telemetry.update();
             }
 /*
@@ -45,7 +45,7 @@ public class ServoTesting extends LinearOpMode {
  */
 
 
-            telemetry.addData("left", left.getPosition());
+//            telemetry.addData("left", left.getPosition());
             //telemetry.addData("right", right.getPosition());
             telemetry.update();
 

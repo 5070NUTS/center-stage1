@@ -13,11 +13,11 @@ public class Prenut2 extends LinearOpMode{
         while (opModeIsActive()) {
             hazel.strafe(950,0.2, "left");
             hazel.drive(-1175,0.2);
-            hazel.wait(1000);
-            hazel.autoScore(-2500,0.5,0.08,0.35);
-            hazel.wait(650);
+            //hazel.wait(1000);
+            //hazel.autoScore(-2500,0.5,0.08,0.35);
+            //hazel.wait(650);
             hazel.drive(50,0.2);
-            hazel.autoSet(0.9);
+            //hazel.autoSet(0.9);
             hazel.strafe(800,0.2, "right");
             hazel.drive(-250,0.2);
 

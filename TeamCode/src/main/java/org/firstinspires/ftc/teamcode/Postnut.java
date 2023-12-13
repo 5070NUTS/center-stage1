@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Postnut extends LinearOpMode {
     public void runOpMode(){
-        Servo left = hardwareMap.get(Servo.class, "left");
-        Servo middle = hardwareMap.get(Servo.class, "middle");
+        //Servo left = hardwareMap.get(Servo.class, "left");
+        //Servo middle = hardwareMap.get(Servo.class, "middle");
         Drivetrain hazel = new Drivetrain(this, hardwareMap);
         //left.setPosition(0.42);
        // middle.setPosition(0.35);
