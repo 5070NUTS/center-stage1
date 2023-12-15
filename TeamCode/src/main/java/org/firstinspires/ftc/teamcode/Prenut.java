@@ -6,29 +6,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous
 public class Prenut extends LinearOpMode{
     public void runOpMode() {
-        Drivetrain hazel = new Drivetrain(this, hardwareMap);
+        Drivetrain hazel = new Drivetrain(this);
+        Mechanisms mech = new Mechanisms(this);
 
-
+        hazel.initDrivetrain(hardwareMap);
+        mech.initMechanisms(hardwareMap);
         waitForStart();
-        while (opModeIsActive()) {
-            hazel.strafe(950,0.2, "right");
-            hazel.drive(-1175,0.2);
-            //hazel.wait(1000);
-            //hazel.autoScore(-2500,0.5,0.08,0.35);
-            //hazel.wait(650);
-            hazel.drive(50,0.2);
-            //hazel.autoSet(0.9);
-            hazel.strafe(800,0.2, "left");
-            hazel.drive(-250,0.2);
-
-            break;
+        while (opModeIsActive()){
+            hazel.drive(-1920,0.8);
+        }
 
 
 
-
-            //hazel.drive(1170,0.5);
-            //break;
 
         }
+
+
     }
-}
+

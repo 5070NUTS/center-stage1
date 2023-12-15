@@ -11,7 +11,7 @@ public class ServoTesting extends LinearOpMode {
     public void runOpMode(){
         Servo leftHanging = hardwareMap.get(Servo.class, "leftHanging");
         //Servo right = hardwareMap.get(Servo.class, "right");
-        Drivetrain hazel = new Drivetrain(this, hardwareMap);
+        //Drivetrain hazel = new Drivetrain(this, hardwareMap);
         waitForStart();
 
         while (opModeIsActive()){

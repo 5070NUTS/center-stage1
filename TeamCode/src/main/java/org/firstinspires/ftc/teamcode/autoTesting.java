@@ -7,31 +7,30 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Autonomous
 public class autoTesting extends LinearOpMode {
     public void runOpMode() {
-       DcMotor viperSlideLeft = hardwareMap.get(DcMotor.class,"viperSlideLeft");
-       DcMotor viperSlideRight = hardwareMap.get(DcMotor.class,"viperSlideRight");
-       DcMotor frontLeft = hardwareMap.get(DcMotor.class,"frontLeft");
-       DcMotor frontRight = hardwareMap.get(DcMotor.class,"frontRight");
-       DcMotor backLeft = hardwareMap.get(DcMotor.class,"backLeft");
-       DcMotor backRight = hardwareMap.get(DcMotor.class,"backRight");
-        Drivetrain hazel = new Drivetrain(this, hardwareMap);
+
 
 
         waitForStart();
+        Drivetrain drivetrain = new Drivetrain(this);
+        Mechanisms mechanisms = new Mechanisms(this);
+        drivetrain.initDrivetrain(hardwareMap);
+        mechanisms.initMechanisms(hardwareMap);
         while (opModeIsActive()) {
-            telemetry.addData("left", viperSlideLeft.getCurrentPosition());
-            telemetry.addData("right", viperSlideRight.getCurrentPosition());
 
-            telemetry.addData("frontLeft current", frontLeft.getCurrentPosition());
+
+            telemetry.addData("frontLeft current", drivetrain.frontLeft.getCurrentPosition());
             //telemetry.addData("frontLeft target", frontLeft.getTargetPosition());
 
-            telemetry.addData("frontRight current", frontRight.getCurrentPosition());
+            telemetry.addData("frontRight current", drivetrain.frontRight.getCurrentPosition());
             //telemetry.addData("frontRight target", frontRight.getTargetPosition());
 
-            telemetry.addData("backLeft current", backLeft.getCurrentPosition());
+            telemetry.addData("backLeft current", drivetrain.backLeft.getCurrentPosition());
             //telemetry.addData("backLeft target", backLeft.getTargetPosition());
 
-            telemetry.addData("backRight current", backRight.getCurrentPosition());
+            telemetry.addData("backRight current", drivetrain.backRight.getCurrentPosition());
             //telemetry.addData("backRight target", backRight.getTargetPosition());
+
+            telemetry.addData("viperslide current", mechanisms.viperSlide.getCurrentPosition());
             telemetry.update();
 
 

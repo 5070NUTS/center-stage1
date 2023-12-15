@@ -11,8 +11,9 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 public class CenterstagePipeline {
 
     LinearOpMode opMode;
-    OpenCvInternalCamera phoneCam;
     CenterstageDetection cameraPipeline;
+    OpenCvInternalCamera phoneCam;
+
     HardwareMap hardwareMap;
 
     public CenterstagePipeline(LinearOpMode opMode, HardwareMap hwMap) {
@@ -29,10 +30,15 @@ public class CenterstagePipeline {
         phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                phoneCam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+                phoneCam.startStreaming(960,720, OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode) {}
         });
+
     }
+
+    public int getRegion1Y() {return cameraPipeline.getRegion1Y();}
+    public int getRegion2Y() {return cameraPipeline.getRegion2Y();}
+    public int getPosition() {return cameraPipeline.getPosition();}
 }

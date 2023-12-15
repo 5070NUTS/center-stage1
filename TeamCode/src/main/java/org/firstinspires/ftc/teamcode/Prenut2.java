@@ -6,29 +6,46 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous
 public class Prenut2 extends LinearOpMode{
     public void runOpMode() {
-        Drivetrain hazel = new Drivetrain(this, hardwareMap);
+        Drivetrain hazel = new Drivetrain(this);
+        Mechanisms mech = new Mechanisms(this);
+        CenterstagePipeline pipeline = new CenterstagePipeline(this, hardwareMap);
 
-
+        pipeline.initializeCamera();
+        hazel.initDrivetrain(hardwareMap);
+        mech.initMechanisms(hardwareMap);
         waitForStart();
         while (opModeIsActive()) {
-            hazel.strafe(950,0.2, "left");
-            hazel.drive(-1175,0.2);
-            //hazel.wait(1000);
-            //hazel.autoScore(-2500,0.5,0.08,0.35);
-            //hazel.wait(650);
-            hazel.drive(50,0.2);
-            //hazel.autoSet(0.9);
-            hazel.strafe(800,0.2, "right");
-            hazel.drive(-250,0.2);
+            telemetry.addData("Region1 Brightness", pipeline.getRegion1Y());
+            telemetry.addData("Region2 Brightness", pipeline.getRegion2Y());
+            telemetry.addData("Position", pipeline.getPosition());
+            telemetry.update();
 
-            break;
+            int position = pipeline.getPosition();
 
 
 
+            if(position == 1){
+                break;
 
-            //hazel.drive(1170,0.5);
-            //break;
+            }
+            else if(position == 2){
+                //mech.closeClaws();
+                hazel.drive(-1920,0.5);
+
+                //hazel.wait(5000);
+                mech.axle1.setTargetPosition(4300);
+                mech.axle2.setTargetPosition(4300);
+                mech.viperSlide.setTargetPosition(1050);
+
+            }
+            else if(position == 3){
+                break;
+
+            }
+
 
         }
+
     }
 }
+
